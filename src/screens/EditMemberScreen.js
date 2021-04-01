@@ -2,16 +2,20 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
 import {connect} from 'react-redux';
 
-class AddMemberScreen extends Component {
-  constructor() {
-    super();
+class EditMemberScreen extends Component {
+  constructor(props) {
+    super(props);
 
     this.state = {
-      name: '',
-      citizenId: '',
-      phoneNumber: '',
+      name: this.props.route.params.data.name,
+      citizenId: this.props.route.params.data.citizenId,
+      phoneNumber: this.props.route.params.data.phoneNumber,
     };
   }
+
+  // componentDidMount(){
+
+  // }
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
@@ -22,17 +26,11 @@ class AddMemberScreen extends Component {
   handleSubmit = () => {
     const data = this.state;
     this.props.dispatch({
-      type: 'ADD_MEMBER',
-      data: {
-        ...data,
-        id: Math.random().toString(36).substring(7),
-      },
+      type: 'EDIT_MEMBER',
+      id: this.props.route.params.data.id,
+      data,
     });
-    this.setState({
-      name: '',
-      citizenId: '',
-      phoneNumber: '',
-    });
+    this.props.navigation.navigate('MainMemberScreen');
   };
   render() {
     return (
@@ -74,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect()(AddMemberScreen);
+export default connect()(EditMemberScreen);

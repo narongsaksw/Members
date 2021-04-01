@@ -14,7 +14,11 @@ class MainMemberScreen extends Component {
     return (
       <View style={styles.container}>
         {this.props.members.map(item => (
-          <MemberCard key={item.id} item={item} />
+          <MemberCard
+            key={item.id}
+            item={item}
+            navigation={this.props.navigation}
+          />
         ))}
         {this.props.members.length === 0 ? (
           <TouchableOpacity onPress={this.toAddMember}>

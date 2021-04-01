@@ -20,16 +20,24 @@ class MemberCard extends Component {
       {text: 'OK', onPress: () => this.onDelete(id)},
     ]);
   render() {
-    const {id, name, phoneNumber} = this.props.item;
+    const {citizenId, name, phoneNumber, id} = this.props.item;
+    console.log(this.props.item);
     return (
       <View style={styles.container}>
         <View>
           <Text>{name}</Text>
-          <Text>{id}</Text>
+          <Text>{citizenId}</Text>
           <Text>{phoneNumber}</Text>
         </View>
         <View style={{alignSelf: 'center'}}>
-          <Text>Edit</Text>
+          <Text
+            onPress={() =>
+              this.props.navigation.navigate('EditMemberScreen', {
+                data: this.props.item,
+              })
+            }>
+            Edit
+          </Text>
           <Text onPress={() => this.Alert(id, name)}>Delete</Text>
         </View>
       </View>
