@@ -25,9 +25,9 @@ class MemberCard extends Component {
     return (
       <View style={styles.container}>
         <View>
-          <Text>{name}</Text>
-          <Text>{citizenId}</Text>
-          <Text>{phoneNumber}</Text>
+          <Text style={{color: '#fff'}}>{name}</Text>
+          <Text style={{color: '#fff'}}>{citizenId}</Text>
+          <Text style={{color: '#fff'}}>{phoneNumber}</Text>
         </View>
         <View style={{alignSelf: 'center'}}>
           <Text

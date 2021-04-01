@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import Input from 'react-native-text-input-mask';
 import {connect} from 'react-redux';
 
 class AddMemberScreen extends Component {
@@ -10,13 +11,35 @@ class AddMemberScreen extends Component {
       name: '',
       citizenId: '',
       phoneNumber: '',
+      error: {
+        name: false,
+        citizenId: false,
+        phoneNumber: false,
+      },
     };
   }
 
-  inputValueUpdate = (val, prop) => {
+  inputValueUpdate = (val, prop, length) => {
     const state = this.state;
     state[prop] = val;
     this.setState(state);
+
+    if (!val) {
+      this.setState({error: {[prop]: `กรุณากรอกข้อมูลให้ครบถ้วน`}});
+    } else if (prop === 'phoneNumber' && val.length < length) {
+      this.setState({error: {[prop]: 'กรุณากรอกหมายเลขโทรศัพท์ให้ครบถ้วน'}});
+    } else if (prop === 'phoneNumber' && val.length === length) {
+      const splitString = val.split('');
+      if (splitString[0] != '0') {
+        this.setState({error: {[prop]: 'กรุณากรอกหมายเลขโทรศัพท์ให้ถูกต้อง'}});
+      } else {
+        this.setState({error: {[prop]: false}});
+      }
+    } else if (prop === 'citizenId' && val.length < length) {
+      this.setState({error: {[prop]: 'กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง'}});
+    } else {
+      this.setState({error: {[prop]: false}});
+    }
   };
 
   handleSubmit = () => {
@@ -35,6 +58,7 @@ class AddMemberScreen extends Component {
     });
   };
   render() {
+    const {error} = this.state;
     return (
       <View style={styles.container}>
         <TextInput
@@ -43,19 +67,36 @@ class AddMemberScreen extends Component {
           value={this.state.name}
           onChangeText={val => this.inputValueUpdate(val, 'name')}
         />
-        <TextInput
+        {error.name && <Text style={styles.error}>*{error.name}</Text>}
+        <Input
           placeholder="ID"
           style={styles.input}
           value={this.state.citizenId}
-          onChangeText={val => this.inputValueUpdate(val, 'citizenId')}
+          onChangeText={val => this.inputValueUpdate(val, 'citizenId', 17)}
+          keyboardType="numeric"
+          mask={'[0]-[0000]-[00000]-[00]-[0]'}
         />
-        <TextInput
+        {error.citizenId && (
+          <Text style={styles.error}>*{error.citizenId}</Text>
+        )}
+        <Input
           placeholder="PHONE NUMBER"
           style={{...styles.input, marginBottom: 20}}
           value={this.state.phoneNumber}
-          onChangeText={val => this.inputValueUpdate(val, 'phoneNumber')}
+          onChangeText={val => this.inputValueUpdate(val, 'phoneNumber', 12)}
+          keyboardType="numeric"
+          mask={'[000]-[000]-[0000]'}
         />
-        <Button title="SUBMIT" onPress={() => this.handleSubmit()} />
+        {error.phoneNumber && (
+          <Text style={{...styles.error, marginBottom: 10}}>
+            *{error.phoneNumber}
+          </Text>
+        )}
+        <Button
+          title="SUBMIT"
+          onPress={() => this.handleSubmit()}
+          // disabled={disabled}
+        />
       </View>
     );
   }
@@ -71,6 +112,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginVertical: 10,
     borderColor: '#D4D4D4',
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
   },
 });
 
