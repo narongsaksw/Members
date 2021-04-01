@@ -3,17 +3,15 @@ import Navigation from './src/navigation';
 import {Provider} from 'react-redux';
 import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 // import store from './src/store';
+import {createStore} from 'redux';
+import AddMemebr from './src/reducers/AddMemberReducer';
+const store = createStore(AddMemebr);
 class App extends Component {
   render() {
     return (
-      //  <Provider store={store}>
-      // <SafeAreaView>
-      //   <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <Navigation />
-      // <Text>Hello</Text>
-      //   </ScrollView>
-      // </SafeAreaView>
-      //  </Provider>
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
     );
   }
 }
